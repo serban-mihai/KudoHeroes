@@ -1,2 +1,2 @@
-# KudoHeroes
+# KudosHeroes
 Kudos Counter for Slack
