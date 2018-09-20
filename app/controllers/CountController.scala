@@ -21,14 +21,15 @@ class CountController @Inject() (cc: ControllerComponents,
    */
   def count = Action {
 
-    Ok("Works")
+    //Ok("Works")
     /*implicit val sys = ActorSystem.apply()
     val token = "xoxa-2-435422739219-440042584230-438104368577-f02e4038043c178be6e78f5a7c8987f4"
     val apiClient = SlackApiClient(token)
     val res = Await.result(apiClient.getChannelHistory("CCV15TEKY", None, None, None, None), Duration.Inf)
     val formatJs = res.messages
-    println(res.messages.toString())
-    Ok("Ok")*/
+    println(res.messages.toString())*/
+
+    Ok("Ok")
   }
 
 }
