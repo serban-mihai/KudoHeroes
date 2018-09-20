@@ -7,7 +7,7 @@ case class User(id: String,
                 real_name: String,
                 image_24: String,
                 tacos: Option[Int],
-                isAdmin: Boolean,
+                isAdmin: Boolean
                 )
 
 object User {
