@@ -31,7 +31,8 @@ object User {
       case None ⇒ JsNull
     }
   }
-  val userReads: Reads[User] =(
+
+  implicit val userReads: Reads[User] =(
       (JsPath \ "id").read[String] and
       (JsPath \ "real_name").read[String] and
       (JsPath \ "image_24").read[String] and
@@ -39,7 +40,7 @@ object User {
       (JsPath \ "isAdmin").read[Boolean]
     ) (User.apply _)
 
-  val userWrites: Writes[User] =(
+  implicit val userWrites: OWrites[User] =(
       (JsPath \ "id").write[String] and
       (JsPath \ "real_name").write[String] and
       (JsPath \ "image_24").write[String] and
@@ -49,5 +50,5 @@ object User {
 
   implicit val movieFormat: Format[User] =
     Format(userReads, userWrites)
-  implicit val userFormat = Json.format[User]
+  implicit val userFormat: OFormat[User] = Json.format[User]
 }

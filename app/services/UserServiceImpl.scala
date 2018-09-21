@@ -20,7 +20,11 @@ class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userReposit
   def create(user: User) = {
     userRepository.create(user)
   }
-  /*override def findAll(): Future[List[User]] = {
+
+  override def findById(userID: String): Future[Option[User]] = {
+    userRepository.findById(userID)
+  }
+  override def findAll(): Future[List[User]] = {
     for {
       u <- userRepository.findAll()
     } yield u
@@ -33,12 +37,7 @@ class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userReposit
     userRepository.update(user)
   }
 
-  override def findById(userID: String): Future[Option[User]] = {
-    userRepository.findById(userID)
-  }
-
   override def findByName(name: String): Future[Option[User]] = {
     userRepository.findByName(name)
-  }*/
-
+  }
 }

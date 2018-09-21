@@ -29,12 +29,13 @@ class UserController @Inject()
       }
     )
   }
-  /*def findById(id: String) = Action.async { implicit request =>
+  def findById(id: String) = Action.async { implicit request =>
     userService
       .findById(id)
       .map(toJson(_))
       .map(Ok(_))
   }
+
   def findAllUser() = Action.async { implicit request =>
     userService
       .findAll()
@@ -48,13 +49,13 @@ class UserController @Inject()
       .map(Ok(_))
   }
 
-  def deleteUser(id: String) = Action.async { implicit request =>
+  def delete(id: String) = Action.async { implicit request =>
     userService
       .delete(id)
       .map(_ => Ok)
   }
 
-  def updateUser() = Action.async(parse.json) { implicit request =>
+  def update() = Action.async(parse.json) { implicit request =>
     request.body.validate[User].fold(
       _ => Future.successful(BadRequest(Json.obj("status" -> "Invalid"))),
       user => {
@@ -64,5 +65,5 @@ class UserController @Inject()
           .map(Ok(_))
       }
     )
-  }*/
+  }
 }
