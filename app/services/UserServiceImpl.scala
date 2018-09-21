@@ -9,7 +9,7 @@ import repositories.UserRepository
 import scala.concurrent.{ExecutionContext, Future}
 
 
-@Singleton
+//@Singleton
 class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userRepository: UserRepository) (implicit ex: ExecutionContext) extends UserService {
 
   def collection: Future[JSONCollection] = {

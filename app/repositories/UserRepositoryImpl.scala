@@ -8,8 +8,7 @@ import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class  UserRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi) (implicit ec: ExecutionContext) extends UserRepository{
+class  UserRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi) (implicit ec: ExecutionContext) extends UserRepository {
 
   def collection: Future[JSONCollection] = {
     reactiveMongoApi.database.map(_.collection("user", FailoverStrategy.default))
