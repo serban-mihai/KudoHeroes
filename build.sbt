@@ -32,4 +32,9 @@ libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.10"
 libraryDependencies += ws
 
 /* Slack Client*/
+//libraryDependencies += "com.flyberrycapital" %% "scala-slack" % "0.3.1"
 libraryDependencies += "com.github.gilbertw1" %% "slack-scala-client" % "0.2.3"
+
+
+//json parser
+libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"

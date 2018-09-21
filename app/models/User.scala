@@ -6,23 +6,11 @@ import play.api.libs.json._
 case class User(id: String,
                 real_name: String,
                 image_24: String,
+                is_bot: Boolean,
                 tacos: Option[Int],
-                isAdmin: Boolean
-                )
+                isAdmin: Boolean)
 
 object User {
-  /*implicit object BSONObjectIDFormat extends Format[BSONObjectID] {
-    def writes(objectId: BSONObjectID): JsValue = JsString(objectId.stringify)
-    def reads(json: JsValue): JsResult[BSONObjectID] = json match {
-      case JsString(x) => {
-        val maybeOID: Try[BSONObjectID] = BSONObjectID.parse(x)
-        if(maybeOID.isSuccess) JsSuccess(maybeOID.get) else {
-          JsError("Expected BSONObjectID as JsString")
-        }
-      }
-      case _ => JsError("Expected BSONObjectID as JsString")
-    }
-  }*/
   implicit def optionFormat[T: Format]: Format[Option[T]] = new Format[Option[T]]{
     override def reads(json: JsValue): JsResult[Option[T]] = json.validateOpt[T]
 

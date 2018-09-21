@@ -4,7 +4,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-#GET     /                           controllers.HomeController.index
+GET     /userInfo                   controllers.UserController.userInfo
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
@@ -19,3 +19,4 @@ GET     /:id                        controllers.UserController.findById(id: Stri
 DELETE  /:id                        controllers.UserController.delete(id: String)
 # Update user (Test)
 PUT     /                           controllers.UserController.update
+
