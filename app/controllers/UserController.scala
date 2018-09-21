@@ -1,6 +1,5 @@
 package controllers
 
-
 import akka.actor._
 import javax.inject._
 import models._
@@ -9,12 +8,11 @@ import play.api.mvc._
 import services.UserService
 import slack.api.SlackApiClient
 import scala.collection.mutable
+import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class UserController @Inject()
 (cc: ControllerComponents, userService: UserService, ws: WSClient) extends AbstractController(cc){
-
-
-
 
   def countWords(text: String) = {
     val counts = mutable.Map.empty[String, Int].withDefaultValue(0)
@@ -31,7 +29,6 @@ class UserController @Inject()
     val list = reg.findAllIn(message.text).toList
     val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
     val counter = tacos.get("taco").getOrElse(0)
-
     (list.head, counter)
 
   }
@@ -67,8 +64,53 @@ class UserController @Inject()
 
       Ok(finalList.toString())
     }
+  def createUser() = Action.async(parse.json) { implicit request =>
+    request.body.validate[User].fold(
+      _ => Future.successful(BadRequest(Json.obj("status" -> "Invalid"))),
+      user => {
+        userService
+          .create(user)
+          .map(toJson(_))
+          .map(Created(_))
+      }
+    )
+  }
+  def findById(id: String) = Action.async { implicit request =>
+    userService
+      .findById(id)
+      .map(toJson(_))
+      .map(Ok(_))
+  }
+
+  def findAllUser() = Action.async { implicit request =>
+    userService
+      .findAll()
+      .map(toJson(_))
+      .map(Ok(_))
+  }
+  def findByName(name: String) = Action.async { implicit request =>
+    userService
+      .findByName(name)
+      .map(toJson(_))
+      .map(Ok(_))
+  }
+
+  def delete(id: String) = Action.async { implicit request =>
+    userService
+      .delete(id)
+      .map(_ => Ok)
+  }
+
+  def update() = Action.async(parse.json) { implicit request =>
+    request.body.validate[User].fold(
+      _ => Future.successful(BadRequest(Json.obj("status" -> "Invalid"))),
+      user => {
+        userService
+          .update(user)
+          .map(toJson(_))
+          .map(Ok(_))
+      }
+    )
   }
 }
-
-
 

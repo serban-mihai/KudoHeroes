@@ -6,6 +6,7 @@ import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.FailoverStrategy
 import reactivemongo.play.json.collection.JSONCollection
 import repositories.UserRepository
+
 import scala.concurrent.{ExecutionContext, Future}
 
 
@@ -20,4 +21,23 @@ class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userReposit
     userRepository.create(user)
   }
 
+  override def findById(userID: String): Future[Option[User]] = {
+    userRepository.findById(userID)
+  }
+  override def findAll(): Future[List[User]] = {
+    for {
+      u <- userRepository.findAll()
+    } yield u
+  }
+  override def delete(id: String) = {
+    userRepository.delete(id)
+  }
+
+  override def update(user: User) = {
+    userRepository.update(user)
+  }
+
+  override def findByName(name: String): Future[Option[User]] = {
+    userRepository.findByName(name)
+  }
 }
