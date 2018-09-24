@@ -21,6 +21,7 @@ class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userReposit
     userRepository.create(user)
   }
 
+
   override def findById(userID: String): Future[Option[User]] = {
     userRepository.findById(userID)
   }

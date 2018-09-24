@@ -6,6 +6,7 @@ import play.api.libs.json.Json
 import play.modules.reactivemongo.ReactiveMongoApi
 import play.modules.reactivemongo.json._
 import reactivemongo.api.{Cursor, FailoverStrategy, ReadPreference}
+import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,10 +35,11 @@ class UserRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi) (implicit
   }
 
   override def findAll(): Future[List[User]] = {
-    collection.flatMap(_.find(Json.obj())
+    collection.flatMap(_.find(Json.obj()).sort(Json.obj("tacos" -> -1))
       .cursor[User](ReadPreference.primary)
       .collect[List](Int.MaxValue, Cursor.ContOnError[List[User]]()))
   }
+
   override def delete(id: String) = {
     for{
       d <- collection.flatMap(_.remove(Json.obj("id" -> id)))
