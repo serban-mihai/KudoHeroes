@@ -24,6 +24,7 @@ object User {
       (JsPath \ "id").read[String] and
       (JsPath \ "real_name").read[String] and
       (JsPath \ "image_24").read[String] and
+        (JsPath \ "is_bot").read[Boolean] and
       (JsPath \ "tacos").read[Option[Int]] and
       (JsPath \ "isAdmin").read[Boolean]
     ) (User.apply _)
@@ -32,6 +33,7 @@ object User {
       (JsPath \ "id").write[String] and
       (JsPath \ "real_name").write[String] and
       (JsPath \ "image_24").write[String] and
+        (JsPath \ "is_bot").write[Boolean] and
       (JsPath \ "tacos").write[Option[Int]] and
       (JsPath \ "isAdmin").write[Boolean]
     ) (unlift(User.unapply))

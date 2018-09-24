@@ -3,16 +3,23 @@ package controllers
 import akka.actor._
 import javax.inject._
 import models._
+import play.api.libs.json.Json
 import play.api.libs.ws._
 import play.api.mvc._
+import reactivemongo.api.BSONSerializationPack
+import reactivemongo.api.commands.Command
 import services.UserService
 import slack.api.SlackApiClient
+
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
+import reactivemongo.bson._
 
 @Singleton
 class UserController @Inject()
-(cc: ControllerComponents, userService: UserService, ws: WSClient) extends AbstractController(cc){
+(cc: ControllerComponents, userService: UserService, ws: WSClient)(implicit ec: ExecutionContext) extends AbstractController(cc){
+
+
 
   def countWords(text: String) = {
     val counts = mutable.Map.empty[String, Int].withDefaultValue(0)
@@ -49,49 +56,54 @@ class UserController @Inject()
       tacos2 = msgs.map {
         m => extractTaco(m)
       }
-      finaltaco = tacos2.groupBy(_._1).map(e => e._1 -> e._2.map(a=>a._2).sum)
+      finaltaco = tacos2.groupBy(_._1).map(e => e._1 -> e._2.map(a => a._2).sum)
 
     } yield {
       val finalList = usr.map { u =>
-        User(u.id, u.profile.get.real_name.getOrElse(""), u.profile.get.image_24, u.is_bot.getOrElse(true),Option(finaltaco.get(u.id).getOrElse(0)))
+        User(u.id, u.profile.get.real_name.getOrElse(""), u.profile.get.image_24, u.is_bot.getOrElse(true), Option(finaltaco.get(u.id).getOrElse(0)), false)
       }
 
-      for{
+      for {
         usr <- finalList
-        if(usr.is_bot == false)
+        if (usr.is_bot == false)
       } userService.create(usr)
 
 
       Ok(finalList.toString())
     }
+  }
+
+
   def createUser() = Action.async(parse.json) { implicit request =>
     request.body.validate[User].fold(
       _ => Future.successful(BadRequest(Json.obj("status" -> "Invalid"))),
       user => {
         userService
           .create(user)
-          .map(toJson(_))
+          .map(Json.toJson(_))
           .map(Created(_))
       }
     )
   }
+
   def findById(id: String) = Action.async { implicit request =>
     userService
       .findById(id)
-      .map(toJson(_))
+      .map(Json.toJson(_))
       .map(Ok(_))
   }
 
   def findAllUser() = Action.async { implicit request =>
     userService
       .findAll()
-      .map(toJson(_))
+      .map(Json.toJson(_))
       .map(Ok(_))
   }
+
   def findByName(name: String) = Action.async { implicit request =>
     userService
       .findByName(name)
-      .map(toJson(_))
+      .map(Json.toJson(_))
       .map(Ok(_))
   }
 
@@ -107,10 +119,11 @@ class UserController @Inject()
       user => {
         userService
           .update(user)
-          .map(toJson(_))
+          .map(Json.toJson(_))
           .map(Ok(_))
       }
     )
   }
+
 }
 

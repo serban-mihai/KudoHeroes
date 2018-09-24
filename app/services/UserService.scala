@@ -10,6 +10,7 @@ trait UserService {
 
   def create(user: User): Future[Option[User]]
 
+
   def findById(id: String): Future[Option[User]]
 
   def findAll(): Future[List[User]]
