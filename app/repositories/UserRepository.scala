@@ -19,5 +19,4 @@ trait UserRepository {
 
   def update(user: User): Future[Option[User]]
 
-
 }

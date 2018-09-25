@@ -4,7 +4,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /userInfo                   controllers.UserController.userInfo
+GET     /getUsers                  controllers.UserController.getUsers
 
 GET     /allUsers                   controllers.UserController.findAllUser()
 
@@ -19,9 +19,16 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 # Create User (Test)
 POST    /new                        controllers.UserController.createUser
 # Get User By ID (Test)
-GET     /:id                        controllers.UserController.findById(id: String)
+GET     /home/:id                   controllers.UserController.findById(id: String)
 # Delete User (Test)
-DELETE  /:id                        controllers.UserController.delete(id: String)
+DELETE  /home/:id                   controllers.UserController.delete(id: String)
 # Update user (Test)
-PUT     /                           controllers.UserController.update
+PUT     /home                       controllers.UserController.update
+# HOME
+GET     /home                       controllers.HomeController.index
+
+GET     /random                     controllers.HomeController.random
+
+
+
 
