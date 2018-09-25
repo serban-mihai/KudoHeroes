@@ -6,7 +6,6 @@ import play.api.libs.json.Json
 import play.modules.reactivemongo.ReactiveMongoApi
 import play.modules.reactivemongo.json._
 import reactivemongo.api.{Cursor, FailoverStrategy, ReadPreference}
-import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,7 +27,6 @@ class UserRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi) (implicit
     } yield Some(r)
     newUser
   }
-
 
   override def findById(id: String): Future[Option[User]] = {
     collection.flatMap(_.find(Json.obj("id" -> id)).one[User](ReadPreference.primary))

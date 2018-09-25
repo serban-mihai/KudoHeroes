@@ -1,6 +1,6 @@
 package services
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 import models.User
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.FailoverStrategy
@@ -20,7 +20,6 @@ class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userReposit
   def create(user: User) = {
     userRepository.create(user)
   }
-
 
   override def findById(userID: String): Future[Option[User]] = {
     userRepository.findById(userID)

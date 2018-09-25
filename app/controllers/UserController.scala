@@ -6,19 +6,16 @@ import models._
 import play.api.libs.json.Json
 import play.api.libs.ws._
 import play.api.mvc._
-import reactivemongo.api.BSONSerializationPack
-import reactivemongo.api.commands.Command
 import services.UserService
 import slack.api.SlackApiClient
 
 import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, Future}
-import reactivemongo.bson._
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class UserController @Inject()
 (cc: ControllerComponents, userService: UserService, ws: WSClient)(implicit ec: ExecutionContext) extends AbstractController(cc){
-
 
 
   def countWords(text: String) = {
@@ -40,7 +37,7 @@ class UserController @Inject()
 
   }
 
-  def userInfo = Action.async { implicit request =>
+  def getUsers = Action.async { implicit request =>
 
     implicit val system = ActorSystem("slack")
     implicit val ec = system.dispatcher
@@ -48,28 +45,31 @@ class UserController @Inject()
     val client = SlackApiClient(token)
 
 
-    for {
-      msg <- client.getChannelHistory("CCV15TEKY", None, None, None, None)
-      msgs = msg.messages.map { e => e.as[models.Message] }
+    for(
       usr <- client.listUsers()
-
-      tacos2 = msgs.map {
-        m => extractTaco(m)
-      }
-      finaltaco = tacos2.groupBy(_._1).map(e => e._1 -> e._2.map(a => a._2).sum)
-
-    } yield {
+    ) yield {
       val finalList = usr.map { u =>
-        User(u.id, u.profile.get.real_name.getOrElse(""), u.profile.get.image_24, u.is_bot.getOrElse(true), Option(finaltaco.get(u.id).getOrElse(0)), false)
+        User(u.id, u.profile.get.real_name.getOrElse(""), u.profile.get.image_192, u.is_bot.getOrElse(true), false)
       }
 
-      for {
-        usr <- finalList
-        if (usr.is_bot == false)
-      } userService.create(usr)
+      val dbUsers = for {
 
+        usrr <- finalList
+        if (usrr.is_bot == false && usrr.id != "USLACKBOT")
 
-      Ok(finalList.toString())
+      } yield {
+
+        val exist = Await.result(userService.findById(usrr.id), Duration.Inf)
+
+        if (exist == None)
+          userService.create(usrr)
+        else
+          userService.update(usrr)
+
+      }
+
+      Ok(Json.toJson(finalList))
+
     }
   }
 
