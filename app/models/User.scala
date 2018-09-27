@@ -5,7 +5,7 @@ import play.api.libs.json._
 
 case class User(id: String,
                 real_name: String,
-                image_24: String,
+                image_192: String,
                 is_bot: Boolean,
                 isAdmin: Boolean)
 
@@ -22,7 +22,7 @@ object User {
   implicit val userReads: Reads[User] =(
       (JsPath \ "id").read[String] and
       (JsPath \ "real_name").read[String] and
-      (JsPath \ "image_24").read[String] and
+      (JsPath \ "image_192").read[String] and
         (JsPath \ "is_bot").read[Boolean] and
       (JsPath \ "isAdmin").read[Boolean]
     ) (User.apply _)
@@ -30,7 +30,7 @@ object User {
   implicit val userWrites: OWrites[User] =(
       (JsPath \ "id").write[String] and
       (JsPath \ "real_name").write[String] and
-      (JsPath \ "image_24").write[String] and
+      (JsPath \ "image_192").write[String] and
         (JsPath \ "is_bot").write[Boolean] and
       (JsPath \ "isAdmin").write[Boolean]
     ) (unlift(User.unapply))
