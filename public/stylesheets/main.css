@@ -197,10 +197,17 @@ Leaderboard Top 1
     transition: all .35s ease-in-out;
 }
 .leaderboard1 ol li img {
+    z-index: 2;
+    position: relative;
+    align-content: center;
+    text-align: center;
     border-radius: 50%;
-    padding: 5px;
-    width: 64px;
-    height: 64px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 50px;
+    height: 50px;
 }
 /*--------------------
 Leaderboard Top 5
@@ -328,52 +335,52 @@ Leaderboard Top 5
     opacity: 0;
 }
 .leaderboard5 ol li:nth-child(1) {
-    background: #d3da2e;
+    background: #e7cd2c;
 }
 .leaderboard5 ol li:nth-child(1)::after {
-    background: #d3da2e;
+    background: #e7cd2c;
 }
 .leaderboard5 ol li:nth-child(2) {
-    background: #d8ca26;
+    background: #eec21d;
 }
 .leaderboard5 ol li:nth-child(2)::after {
-    background: #d8ca26;
+    background: #eec21d;
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
 }
 .leaderboard5 ol li:nth-child(2) mark::before, .leaderboard5 ol li:nth-child(2) mark::after {
-    border-top: 0px solid #d8ca26;
+    border-top: 0px solid #eec21d;
     bottom: -7px;
 }
 .leaderboard5 ol li:nth-child(3) {
-    background: #dcbb23;
+    background: #f4b60e;
 }
 .leaderboard5 ol li:nth-child(3)::after {
-    background: #dcbb23;
+    background: #f4b60e;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
 }
 .leaderboard5 ol li:nth-child(3) mark::before, .leaderboard ol li:nth-child(3) mark::after {
-    border-top: 0px solid #dcbb23;
+    border-top: 0px solid #f4b60e;
     bottom: -3px;
 }
 .leaderboard5 ol li:nth-child(4) {
-    background: #ddac24;
+    background: #faa902;
 }
 .leaderboard5 ol li:nth-child(4)::after {
-    background: #ddac24;
+    background: #faa902;
     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 .leaderboard5 ol li:nth-child(4) mark::before, .leaderboard5 ol li:nth-child(4) mark::after {
     top: -7px;
     bottom: auto;
     border-top: none;
-    border-bottom: 0px solid #ddac24;
+    border-bottom: 0px solid #faa902;
 }
 .leaderboard5 ol li:nth-child(5) {
-    background: #dc9d28;
+    background: #ff9c00;
     border-radius: 0 0 10px 10px;
 }
 .leaderboard5 ol li:nth-child(5)::after {
-    background: #dc9d28;
+    background: #ff9c00;
     box-shadow: 0 -2.5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 0 0 10px 10px;
 }
@@ -381,7 +388,7 @@ Leaderboard Top 5
     top: -9px;
     bottom: auto;
     border-top: none;
-    border-bottom: 0px solid #dc9d28;
+    border-bottom: 0px solid #ff9c00;
 }
 .leaderboard5 ol li:hover {
     z-index: 2;
@@ -398,10 +405,16 @@ Leaderboard Top 5
 }
 .leaderboard5 ol li img {
     z-index: 2;
+    position: relative;
+    align-content: center;
+    text-align: center;
     border-radius: 50%;
-    padding: 5px;
-    width: 64px;
-    height: 64px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 50px;
+    height: 50px;
 }
 /*--------------------
 Leaderboard Top 10
@@ -652,6 +665,7 @@ Leaderboard Top 10
     transition: all .35s ease-in-out;
 }
 .leaderboard10 ol li img {
+    z-index: 2;
     position: relative;
     align-content: center;
     text-align: center;
