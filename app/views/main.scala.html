@@ -4,7 +4,7 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(users: List[User])(content: Html)
+@(title: String)(user: Option[User])(users: List[User])(content: Html)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -34,8 +34,8 @@
                     </h1>
                     <ol>
                         <li>
-                            <mark>@users(0).real_name</mark>
-                            <img src="@users(0).image_192"/>
+                            <mark>@user.get.real_name</mark>
+                            <img src="@user.get.image_192"/>
                             <small>&#x1F32E; 315</small>
                         </li>
                     </ol>
