@@ -18,25 +18,6 @@ class UserController @Inject()
 (cc: ControllerComponents, userService: UserService, ws: WSClient)(implicit ec: ExecutionContext) extends AbstractController(cc){
 
 
-  def countWords(text: String) = {
-    val counts = mutable.Map.empty[String, Int].withDefaultValue(0)
-    for (rawWord <- text.split("[:,!.]+")) {
-      val word = rawWord
-      counts(word) += 1
-    }
-    counts
-  }
-
-  def extractTaco(message: models.Message) = {
-
-    val reg = "[:A-z0-9]+".r
-    val list = reg.findAllIn(message.text).toList
-    val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
-    val counter = tacos.get("taco").getOrElse(0)
-    (list.head, counter)
-
-  }
-
   def getUsers = Action.async { implicit request =>
 
     implicit val system = ActorSystem("slack")

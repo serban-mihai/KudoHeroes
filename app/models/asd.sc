@@ -1,7 +1,7 @@
-
 import scala.collection.mutable
+import services.UserService
 
-var message1 = "<@UCTCJA03V :taco::taco:>"
+
 
 def countWords(text: String) = {
   val counts = mutable.Map.empty[String, Int].withDefaultValue(0)
@@ -16,14 +16,19 @@ def extractTaco(message: String) = {
 
   val reg = "[:A-z0-9]+".r
   val list = reg.findAllIn(message).toList
-  val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
-  val count = tacos.get("taco").getOrElse(0)
+  val tacos = countWords(list.toString()).filter(_._1.equals("taco"))
+  val counter = tacos.get("taco").getOrElse(0)
+  (list, counter)
 
-  (list.head, count)
 }
-val finalResult = extractTaco(message1)
 
 
+val list1 = "<@UCTFF4RC2><@URTFR4RC3><@URTFR4RC4>:taco:"
 
-val seqT: Seq[(String, Int)] = Seq(("a",0), ("b",1), ("c", 2))
-seqT.toMap
+val reg = "[:A-z0-9]+".r
+val list = reg.findAllIn(list1).toList
+
+val nList = extractTaco(list1)
+nList._1.map{ l=>
+  println(l)
+}

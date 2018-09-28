@@ -21,7 +21,6 @@ class HomeController @Inject()(cc: ControllerComponents, userService: UserServic
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-
   def index(id: String) = Action {
     // Async possibly useless, change ASAP!
     val user: Option[User] = Await.result(userService.findById(id), Duration(5, "seconds"))

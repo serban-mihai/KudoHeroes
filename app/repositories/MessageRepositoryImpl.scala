@@ -33,7 +33,7 @@ class MessageRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi) (impli
   }
 
   override def findAll(): Future[List[Message]] = {
-    collection.flatMap(_.find(Json.obj()).sort(Json.obj("tacos" -> -1))
+    collection.flatMap(_.find(Json.obj()).sort(Json.obj("ts" -> 1))
       .cursor[Message](ReadPreference.primary)
       .collect[List](Int.MaxValue, Cursor.ContOnError[List[Message]]()))
   }
