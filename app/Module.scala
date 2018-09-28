@@ -25,6 +25,8 @@ class Module extends AbstractModule {
     bind(classOf[Counter]).to(classOf[AtomicCounter])
     bind(classOf[services.UserService]).to(classOf[services.UserServiceImpl])
     bind(classOf[repositories.UserRepository]).to(classOf[repositories.UserRepositoryImpl])
+    bind(classOf[services.MessageService]).to(classOf[services.MessageServiceImpl])
+    bind(classOf[repositories.MessageRepository]).to(classOf[repositories.MessageRepositoryImpl])
   }
 
 }

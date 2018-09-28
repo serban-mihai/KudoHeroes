@@ -4,7 +4,7 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(users: List[User])(content: Html)
+@(title: String)(content: Html)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,47 +18,6 @@
     <body>
         @* And here's where we render the `Html` object containing
          * the page content. *@
-
-        <div id="friends">
-            <div class="friend">
-                <img src="@users(0).image_24"/>
-                <p>
-                    <strong>@users(0).real_name</strong>
-                    <span>🌮🌮🌮🌮🌮</span>
-                </p>
-            </div>
-            <div class="friend">
-                <img src="@users(1).image_24" />
-                <p>
-                    <strong>@users(1).real_name</strong>
-                    <span></span>
-                </p>
-            </div>
-
-            <div class="friend">
-                <img src="@users(2).image_24" />
-                <p>
-                    <strong>@users(2).real_name</strong>
-                    <span>🌮🌮🌮🌮🌮</span>
-                </p>
-            </div>
-
-            <div class="friend">
-                <img src="@users(1).image_24" />
-                <p>
-                    <strong>@users(1).real_name</strong>
-                    <span></span>
-                </p>
-            </div>
-
-            <div class="friend">
-                <img src="@users(2).image_24" />
-                <p>
-                    <strong>@users(2).real_name</strong>
-                    <span>🌮🌮🌮🌮🌮</span>
-                </p>
-            </div>
-
-        </div>
+        @content
     </body>
 </html>

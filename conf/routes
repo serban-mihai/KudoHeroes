@@ -4,11 +4,18 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /getUsers                  controllers.UserController.getUsers
+
+#getDayOfTaco
+
+GET     /getDayOfTaco               controllers.MessageController.getDayOfTaco
+
+GET     /getMessages                controllers.MessageController.getMessages
+
+GET     /getAllMsg                  controllers.MessageController.findAllMessage
+
+GET     /getUsers                   controllers.UserController.getUsers
 
 GET     /allUsers                   controllers.UserController.findAllUser()
-
-# GET     /top5                   controllers.UserController.topFive
 
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
@@ -19,15 +26,14 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 # Create User (Test)
 POST    /new                        controllers.UserController.createUser
 # Get User By ID (Test)
-GET     /home/:id                   controllers.UserController.findById(id: String)
+GET     /:id                        controllers.UserController.findById(id: String)
 # Delete User (Test)
-DELETE  /home/:id                   controllers.UserController.delete(id: String)
+DELETE  /:id                        controllers.UserController.delete(id: String)
 # Update user (Test)
-PUT     /home                       controllers.UserController.update
+PUT     /                           controllers.UserController.update
 # HOME
 GET     /home                       controllers.HomeController.index
 
-GET     /random                     controllers.HomeController.random
 
 
 

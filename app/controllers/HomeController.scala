@@ -23,14 +23,7 @@ class HomeController @Inject()(cc: ControllerComponents, userService: UserServic
    * a path of `/`.
    */
   def index = Action {
-    val users: List[User] = Await.result(userService.findAll(), Duration(5, "seconds"))
-    Ok(views.html.index("Your new application is ready.")(users))
-  }
-
-
-  def random = Action {
-    val users: List[User] = Await.result(userService.findAll(), Duration(5, "seconds"))
-    Ok(Json.toJson(users))
+    Ok(views.html.index("Your new application is ready."))
   }
 
 }
