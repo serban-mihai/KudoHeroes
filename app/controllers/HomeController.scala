@@ -2,7 +2,6 @@ package controllers
 
 import javax.inject._
 import models.User
-import play.api.libs.json.Json
 import play.api.mvc._
 import services.UserService
 
@@ -22,8 +21,10 @@ class HomeController @Inject()(cc: ControllerComponents, userService: UserServic
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+  def index(id: String) = Action {
+    // Async possibly useless, change ASAP!
+    val user: Option[User] = Await.result(userService.findById(id), Duration(5, "seconds"))
+    val users: List[User] = Await.result(userService.findAll(), Duration(5, "seconds"))
+    Ok(views.html.index("Your new application is ready.")(user)(users))
   }
-
 }
