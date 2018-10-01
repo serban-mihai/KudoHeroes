@@ -6,7 +6,7 @@ import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.{MessageService, UserService}
-import models.{Message, MessageList}
+import models.{Message, UserMessage}
 import org.joda.time.DateTime
 import slack.api.SlackApiClient
 
@@ -36,7 +36,7 @@ class MessageController @Inject()
   }
 
 
- /* def extractTaco(message: models.MessageList): Future[(List[String], Int)] = {
+  /*def extractTaco(message: models.UserMessage): Future[(List[String], Int)] = {
 
     val reg = "[:A-z0-9]+".r
     val list = reg.findAllIn(message.text).toList
@@ -46,23 +46,28 @@ class MessageController @Inject()
     for {
       users <- userService.findByListId(list)
       ids = users.map(_.id)
-    } yield (ids,counter)
+    } yield ids
   }*/
- def extractTaco(message: models.MessageList) = {
+
+
+ def extractUserMsgList(message: models.UserMessage) = {
 
    val reg = "[:A-z0-9]+".r
    val list = reg.findAllIn(message.text).toList
-   val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
-   val counter = tacos.get("taco").getOrElse(0)
 
-   val userList = for {
-     users <- userService.findByListId(list)
-     ids = users.map(_.id)
-   } yield ids
-
-   (userList, counter)
+   val listId = for(users <- userService.findByListId(list)) yield users.map(_.id)
+   Await.result(listId, Duration(5, "seconds"))
  }
 
+  def extractTaco(message: models.UserMessage) = {
+
+    val reg = "[:A-z0-9]+".r
+    val list = reg.findAllIn(message.text).toList
+    val tacos = countWords(list.toString()).filter(_._1.equals("taco"))
+    val counter = tacos.get("taco").getOrElse(0)
+
+    counter
+  }
 
   def getDayOfTaco = Action { implicit request =>
 
@@ -121,10 +126,10 @@ class MessageController @Inject()
       msg.messages
     }
 
-    implicit val msgListJson = Json.format[MessageList]
+    implicit val msgListJson = Json.format[UserMessage]
 
-    val msgs = for(m <- messages) yield {
-      m.flatMap(temp => temp.validate[MessageList] match {
+    val futureMsgs = for(m <- messages) yield {
+      m.flatMap(temp => temp.validate[UserMessage] match {
         case JsSuccess(result, _) => Some(result)
         case JsError(err) =>
           //println("ce am vrut sa vedem: " + temp)
@@ -132,41 +137,29 @@ class MessageController @Inject()
       })
     }
 
-   /* val finalMessages = for {
-      msg <- msgs
-      nrTacos <- Future.sequence(msg.map(m => extractTaco(m).map(t => (m.user, t))))
-    } yield {
-      msg.map { m =>
-        val (listIds, counter) = nrTacos.find(t => t._1.equals(m.user)).get._2
-        Message(m.client_msg_id,
-          m.user,
-          listIds,
-          m.text,
-          counter,
-          m.ts)
-      }
-    }*/
 
- /*   val finalMessages = for {
-      msg <- msgs
-      nrTacos = msg.map(m => extractTaco(m))
-      t <- nrTacos.map(e => e._1)
-    } yield {
-      msg.map { m =>
-        Message(m.client_msg_id,
-          m.user,
-          nrTacos._1,
-          m.text,
-          nrTacos._2,
-          m.ts)
-      }
+
+    val finalMessages = for (
+      msgs <- futureMsgs
+    ) yield {
+      msgs.map(msg =>
+        Message(msg.client_msg_id,
+          msg.user,
+          extractUserMsgList(msg),
+          msg.text,
+          extractTaco(msg),
+          msg.ts))
     }
 
-    finalMessages.map(m => m.map{t =>
+    for(
+      mess <- finalMessages
+    ) mess.map{ms =>
+      if(ms.receiver.length * ms.tacos <= 5 && ms.receiver.length * ms.tacos  >= 1)
+        messageService.create(ms)
+      else
+        None
+    }
 
-        messageService.create(t)
-
-    })*/
 
     Ok("Ok")
   }
