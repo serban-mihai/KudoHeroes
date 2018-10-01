@@ -16,6 +16,8 @@ GET     /getUsers                   controllers.UserController.getUsers
 
 GET     /allUsers                   controllers.UserController.findAllUser()
 
+#GET     /:ids         controllers.UserController.findByListId(ids: List[String])
+
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
@@ -25,7 +27,7 @@ GET     /public/*file               controllers.Assets.versioned(path="/public",
 # Create User (Test)
 POST    /new                        controllers.UserController.createUser
 # Get User By ID (Test)
-GET     /:id                        controllers.UserController.findById(id: String)
+GET     /findById/:id                        controllers.UserController.findById(id: String)
 # Delete User (Test)
 DELETE  /:id                        controllers.UserController.delete(id: String)
 # Update user (Test)

@@ -11,6 +11,8 @@ trait UserRepository {
 
   def findById(id: String): Future[Option[User]]
 
+  def findByListId(ids: List[String]): Future[List[User]]
+
   def findByName(name: String): Future[Option[User]]
 
   def delete(id: String): Future[WriteResult]

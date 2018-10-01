@@ -74,6 +74,13 @@ class UserController @Inject()
       .map(Ok(_))
   }
 
+  def findByListId(ids: List[String]) = Action.async { implicit request =>
+    userService
+      .findByListId(ids)
+      .map(Json.toJson(_))
+      .map(Ok(_))
+  }
+
   def findAllUser() = Action.async { implicit request =>
     userService
       .findAll()

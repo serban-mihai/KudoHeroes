@@ -13,7 +13,7 @@ import slack.api.SlackApiClient
 import scala.collection.mutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 @Singleton
 class MessageController @Inject()
@@ -35,22 +35,33 @@ class MessageController @Inject()
     counts
   }
 
-  def extractTaco(message: models.MessageList) = {
+
+ /* def extractTaco(message: models.MessageList): Future[(List[String], Int)] = {
 
     val reg = "[:A-z0-9]+".r
     val list = reg.findAllIn(message.text).toList
     val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
     val counter = tacos.get("taco").getOrElse(0)
 
-  /*  val listID = list.map{u =>
-      val foo = userService.findById(u)
-      foo case Success =>
-    }
+    for {
+      users <- userService.findByListId(list)
+      ids = users.map(_.id)
+    } yield (ids,counter)
+  }*/
+ def extractTaco(message: models.MessageList) = {
 
-    println("id list: " + listID)*/
-    (list, counter)
+   val reg = "[:A-z0-9]+".r
+   val list = reg.findAllIn(message.text).toList
+   val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
+   val counter = tacos.get("taco").getOrElse(0)
 
-  }
+   val userList = for {
+     users <- userService.findByListId(list)
+     ids = users.map(_.id)
+   } yield ids
+
+   (userList, counter)
+ }
 
 
   def getDayOfTaco = Action { implicit request =>
@@ -112,24 +123,50 @@ class MessageController @Inject()
 
     implicit val msgListJson = Json.format[MessageList]
 
-    val msgs =for(m <- messages) yield {
-        m.flatMap(temp => temp.validate[MessageList] match {
-          case JsSuccess(result, _) => Some(result)
-          case JsError(err) =>
-            //println("ce am vrut sa vedem: " + temp)
-            None
-        })
+    val msgs = for(m <- messages) yield {
+      m.flatMap(temp => temp.validate[MessageList] match {
+        case JsSuccess(result, _) => Some(result)
+        case JsError(err) =>
+          //println("ce am vrut sa vedem: " + temp)
+          None
+      })
     }
 
-   val finalMessages = for (msg <- msgs) yield msg.map(m => Message(m.client_msg_id, m.user, (extractTaco(m)._1), m.text, extractTaco(m)._2, m.ts))
+   /* val finalMessages = for {
+      msg <- msgs
+      nrTacos <- Future.sequence(msg.map(m => extractTaco(m).map(t => (m.user, t))))
+    } yield {
+      msg.map { m =>
+        val (listIds, counter) = nrTacos.find(t => t._1.equals(m.user)).get._2
+        Message(m.client_msg_id,
+          m.user,
+          listIds,
+          m.text,
+          counter,
+          m.ts)
+      }
+    }*/
+
+ /*   val finalMessages = for {
+      msg <- msgs
+      nrTacos = msg.map(m => extractTaco(m))
+      t <- nrTacos.map(e => e._1)
+    } yield {
+      msg.map { m =>
+        Message(m.client_msg_id,
+          m.user,
+          nrTacos._1,
+          m.text,
+          nrTacos._2,
+          m.ts)
+      }
+    }
 
     finalMessages.map(m => m.map{t =>
 
-      if(t.tacos > 0 && (t.receiver.length * t.tacos) <= 5)
         messageService.create(t)
-      else
-        None
-    })
+
+    })*/
 
     Ok("Ok")
   }

@@ -24,6 +24,12 @@ class UserServiceImpl @Inject() (reactiveMongoApi: ReactiveMongoApi, userReposit
   override def findById(userID: String): Future[Option[User]] = {
     userRepository.findById(userID)
   }
+
+  def findByListId(ids: List[String]): Future[List[User]] = {
+    userRepository.findByListId(ids)
+  }
+
+
   override def findAll(): Future[List[User]] = {
     for {
       u <- userRepository.findAll()

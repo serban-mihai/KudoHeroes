@@ -12,6 +12,8 @@ trait UserService {
 
   def findById(id: String): Future[Option[User]]
 
+  def findByListId(ids: List[String]): Future[List[User]]
+
   def findAll(): Future[List[User]]
 
   def findByName(name: String): Future[Option[User]]

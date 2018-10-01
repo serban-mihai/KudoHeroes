@@ -16,6 +16,8 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 .master {
+    width: 50%;
+    height: 50%;
     position: absolute;
     left: 50%;
 }

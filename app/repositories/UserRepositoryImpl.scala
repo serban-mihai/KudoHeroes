@@ -32,6 +32,12 @@ class UserRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi) (implicit
     collection.flatMap(_.find(Json.obj("id" -> id)).one[User](ReadPreference.primary))
   }
 
+
+  override def findByListId(ids: List[String]): Future[List[User]] = {
+    collection.flatMap(_.find(Json.obj("id" -> Json.obj("$in" -> ids))).cursor[User](ReadPreference.primary)
+      .collect[List](Int.MaxValue, Cursor.ContOnError[List[User]]()))
+  }
+
   override def findAll(): Future[List[User]] = {
     collection.flatMap(_.find(Json.obj()).sort(Json.obj("tacos" -> -1))
       .cursor[User](ReadPreference.primary)

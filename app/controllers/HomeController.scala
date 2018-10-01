@@ -25,6 +25,8 @@ class HomeController @Inject()(cc: ControllerComponents, userService: UserServic
     // Async possibly useless, change ASAP!
     val user: Option[User] = Await.result(userService.findById(id), Duration(5, "seconds"))
     val users: List[User] = Await.result(userService.findAll(), Duration(5, "seconds"))
+    val list = Await.result(userService.findByListId(List("UCTCJA030")), Duration(5, "seconds"))
+    println(list.toString)
     Ok(views.html.index("Your new application is ready.")(user)(users))
   }
 }
