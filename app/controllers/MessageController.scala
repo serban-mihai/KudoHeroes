@@ -2,18 +2,17 @@ package controllers
 
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
+import models.{Message, UserMessage}
+import org.joda.time.DateTime
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.{MessageService, UserService}
-import models.{Message, UserMessage}
-import org.joda.time.DateTime
 import slack.api.SlackApiClient
 
 import scala.collection.mutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
 
 @Singleton
 class MessageController @Inject()
@@ -136,8 +135,6 @@ class MessageController @Inject()
           None
       })
     }
-
-
 
     val finalMessages = for (
       msgs <- futureMsgs
