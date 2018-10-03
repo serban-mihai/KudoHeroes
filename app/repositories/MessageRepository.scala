@@ -10,6 +10,8 @@ trait MessageRepository {
 
   def findById(id: String): Future[Option[Message]]
 
+  def findBySenderIdTs(sender: String, ts: String): Future[List[Message]]
+
   def findByName(name: String): Future[Option[Message]]
 
   def delete(id: String): Future[WriteResult]

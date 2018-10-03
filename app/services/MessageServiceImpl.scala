@@ -21,6 +21,11 @@ class MessageServiceImpl @Inject()(reactiveMongoApi: ReactiveMongoApi, messageRe
   override def findById(messageID: String): Future[Option[Message]] = {
     messageRepository.findById(messageID)
   }
+
+  override def findBySenderIdTs(sender: String, ts: String): Future[List[Message]] = {
+    messageRepository.findBySenderIdTs(sender, ts)
+  }
+
   override def findAll(): Future[List[Message]] = {
     for {
       u <- messageRepository.findAll()
