@@ -9,6 +9,7 @@ import play.api.mvc._
 import services.UserService
 import slack.api.SlackApiClient
 
+import scala.collection.mutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 

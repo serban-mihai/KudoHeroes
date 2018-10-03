@@ -4,7 +4,7 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(user: Option[User])(topFiveUsers: List[User])(topTenUsers: List[User])(content: Html)
+@(title: String)(user: Option[User])(users: List[User])(content: Html)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,28 +49,28 @@
                     </h1>
                     <ol>
                         <li>
-                            <mark>@topFiveUsers(0).real_name</mark>
-                            <img src="@topFiveUsers(1).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(1).image_192"/>
                             <small>&#x1F32E; 315</small>
                         </li>
                         <li>
-                            <mark>@topFiveUsers(1).real_name</mark>
-                            <img src="@topFiveUsers(0).image_192"/>
+                            <mark>@users(1).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 301</small>
                         </li>
                         <li>
-                            <mark>@topFiveUsers(0).real_name</mark>
-                            <img src="@topFiveUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 292</small>
                         </li>
                         <li>
-                            <mark>@topFiveUsers(1).real_name</mark>
-                            <img src="@topFiveUsers(0).image_192"/>
+                            <mark>@users(1).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 245</small>
                         </li>
                         <li>
-                            <mark>@topFiveUsers(0).real_name</mark>
-                            <img src="@topFiveUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 203</small>
                         </li>
                     </ol>
@@ -86,52 +86,52 @@
                     <ol>
                         <li>
                             <mark>Andreea Alexandra Stela Juduc</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 315</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(1).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(1).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 301</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(0).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 292</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(1).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(1).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 245</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(0).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 203</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(0).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 315</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(1).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(1).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 301</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(0).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 292</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(1).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(1).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 245</small>
                         </li>
                         <li>
-                            <mark>@topTenUsers(0).real_name</mark>
-                            <img src="@topTenUsers(0).image_192"/>
+                            <mark>@users(0).real_name</mark>
+                            <img src="@users(0).image_192"/>
                             <small>&#x1F32E; 203</small>
                         </li>
                     </ol>
