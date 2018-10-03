@@ -115,7 +115,7 @@ class MessageController @Inject()
 
     var tacos = 0
 
-    val result =
+    val listValMess =
       for{
         messages <- userMessage
       } yield {
@@ -134,19 +134,32 @@ class MessageController @Inject()
 
     println("//================================//")
 
-    result.map(msg => println("Valid Messages: " + msg))
+    listValMess.map(msg => println("Valid Messages: " + msg))
 
-    /*val o = for{
-      msgs <- result
-    } yield{
-      msgs.groupBy(_.receiver).map{ usr =>
-        val re = usr._2.groupBy(_.tacos)
-        (usr._1, re.map(e.))
+    val receiversMessage = for{
+      r <- listValMess
+    } yield r.groupBy(_.receiver)
+
+    /*val listUsrMsgs = listUsrMsg.map{list =>
+        val map = list._2.map{msg =>
+          (getTime(msg.ts.toDouble).dayOfYear().get, msg)
+        }.groupBy(_._1).map{m =>
+          (m._1, m._2.map(_._2))
         }
+        (list._1, map)
+      }.toList
+
+      listUsrMsgs*/
+
+    /*for{
+      rv <- receiversMessage
+    } yield { val fList = rv.map{ lst =>
+      val map = lst._2.map{tc =>
+        tc.tacos
       }
+    }
+
     }*/
-
-
 
     Ok("Ok")
 
@@ -205,7 +218,6 @@ class MessageController @Inject()
       else
         None
     }
-
 
     Ok("Ok")
   }
