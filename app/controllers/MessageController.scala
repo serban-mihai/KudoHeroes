@@ -209,11 +209,11 @@ class MessageController @Inject()
           extractTaco(msg),
           getDate(msg.ts.toDouble.toLong)))
     }
-
+// && !ms.receiver.contains(ms.sender)
     for(
       mess <- finalMessages
     ) mess.map{ms =>
-      if(ms.receiver.length * ms.tacos <= 5 && ms.receiver.length * ms.tacos  >= 1 && !ms.text.contains("USLACKBOT"))
+      if(ms.receiver.length * ms.tacos <= 5 && ms.receiver.length * ms.tacos  >= 1 && !ms.text.contains("USLACKBOT") && !ms.receiver.exists(ms.sender.contains(_)))
         messageService.create(ms)
       else
         None
