@@ -8,9 +8,13 @@ import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.{MessageService, UserService}
+import models.{Message, UserMessage}
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import slack.api.SlackApiClient
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 
@@ -25,6 +29,14 @@ class MessageController @Inject()
 
   }
 
+  def getDate(ts: Long) = {
+
+    val dtFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+    val res = dtFormatter.print(ts * 1000)
+    res
+
+  }
+
   def countWords(text: String) = {
     val counts = mutable.Map.empty[String, Int].withDefaultValue(0)
     for (rawWord <- text.split("[:,!.]+")) {
@@ -35,27 +47,13 @@ class MessageController @Inject()
   }
 
 
-  /*def extractTaco(message: models.UserMessage): Future[(List[String], Int)] = {
-
-    val reg = "[:A-z0-9]+".r
-    val list = reg.findAllIn(message.text).toList
-    val tacos = countWords(list.tail.toString()).filter(_._1.equals("taco"))
-    val counter = tacos.get("taco").getOrElse(0)
-
-    for {
-      users <- userService.findByListId(list)
-      ids = users.map(_.id)
-    } yield ids
-  }*/
-
-
  def extractUserMsgList(message: models.UserMessage) = {
 
    val reg = "[:A-z0-9]+".r
    val list = reg.findAllIn(message.text).toList
 
    val listId = for(users <- userService.findByListId(list)) yield users.map(_.id)
-   Await.result(listId, Duration(5, "seconds"))
+   Await.result(listId, Duration(1, "seconds"))
  }
 
   def extractTaco(message: models.UserMessage) = {
@@ -106,6 +104,70 @@ class MessageController @Inject()
 
   }
 
+  //Testing get message by sender id and ts
+
+
+  def getTest = Action { implicit request =>
+
+    val userMessage = messageService.findBySenderIdTs("UCTFR4RC2","20-09-2018")
+
+    val s = for(smsg <- userMessage) yield smsg.map(r => r.tacos).seq.reduceLeft(_ + _)
+
+    var validMessages = new ListBuffer[Message]()
+
+    var tacos = 0
+
+    val listValMess =
+      for{
+        messages <- userMessage
+      } yield {
+
+        messages.map { msg =>
+          if (tacos + msg.tacos <= 5) {
+            tacos = tacos + msg.tacos
+            validMessages += msg
+          } else
+            None
+        }
+        validMessages
+      }
+
+    userMessage.map(m => println(m))
+
+    println("//================================//")
+
+    listValMess.map(msg => println("Valid Messages: " + msg))
+
+    val receiversMessage = for{
+      r <- listValMess
+    } yield r.groupBy(_.receiver)
+
+    /*val listUsrMsgs = listUsrMsg.map{list =>
+        val map = list._2.map{msg =>
+          (getTime(msg.ts.toDouble).dayOfYear().get, msg)
+        }.groupBy(_._1).map{m =>
+          (m._1, m._2.map(_._2))
+        }
+        (list._1, map)
+      }.toList
+
+      listUsrMsgs*/
+
+    /*for{
+      rv <- receiversMessage
+    } yield { val fList = rv.map{ lst =>
+      val map = lst._2.map{tc =>
+        tc.tacos
+      }
+    }
+
+    }*/
+
+    Ok("Ok")
+
+
+  }
+
   //Put in database all messages from channel who have <<taco>>
 
   def getMessages = Action { implicit request =>
@@ -145,18 +207,17 @@ class MessageController @Inject()
           extractUserMsgList(msg),
           msg.text,
           extractTaco(msg),
-          msg.ts))
+          getDate(msg.ts.toDouble.toLong)))
     }
-
+// && !ms.receiver.contains(ms.sender)
     for(
       mess <- finalMessages
     ) mess.map{ms =>
-      if(ms.receiver.length * ms.tacos <= 5 && ms.receiver.length * ms.tacos  >= 1)
+      if(ms.receiver.length * ms.tacos <= 5 && ms.receiver.length * ms.tacos  >= 1 && !ms.text.contains("USLACKBOT") && !ms.receiver.exists(ms.sender.contains(_)))
         messageService.create(ms)
       else
         None
     }
-
 
     Ok("Ok")
   }
@@ -180,7 +241,16 @@ class MessageController @Inject()
       .findById(id)
       .map(Json.toJson(_))
       .map(Ok(_))
+
   }
+
+  def findBySenderId(sender: String, ts: String) = Action.async { implicit request =>
+    messageService
+      .findBySenderIdTs(sender, ts)
+      .map(Json.toJson(_))
+      .map(Ok(_))
+  }
+
 
   def findAllMessage() = Action.async { implicit request =>
     messageService

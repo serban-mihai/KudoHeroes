@@ -9,6 +9,8 @@ trait MessageService {
 
   def findById(id: String): Future[Option[Message]]
 
+  def findBySenderIdTs(sender: String, ts: String): Future[List[Message]]
+
   def findAll(): Future[List[Message]]
 
   def findByName(name: String): Future[Option[Message]]
