@@ -2,6 +2,8 @@ package controllers
 
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
+import models.{Message, UserMessage}
+import org.joda.time.DateTime
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, ControllerComponents}
@@ -195,8 +197,6 @@ class MessageController @Inject()
           None
       })
     }
-
-
 
     val finalMessages = for (
       msgs <- futureMsgs
